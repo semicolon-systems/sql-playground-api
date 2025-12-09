@@ -4,7 +4,6 @@
  */
 
 import {
-  normalizeSQL,
   sanitizeSQL,
   fingerprint,
   analyzeExplainPlan,
@@ -31,9 +30,6 @@ export async function explainSQLService(
   explainPlan?: string
 ): Promise<ExplanationResult> {
   const llmProvider = createLLMProvider();
-
-  // Normalize the SQL
-  const normalized = normalizeSQL(originalSql);
 
   logger.debug(
     { dialect, hasSchema: !!schema },
@@ -67,7 +63,7 @@ export async function explainSQLService(
     const heuristics = analyzeExplainPlan(parsedPlan);
     // Merge heuristics into explanation optimizations
     explanation.optimizations.push(
-      ...heuristics.recommendations.map(rec => ({
+      ...heuristics.recommendations.map((rec: any) => ({
         title: `Add ${rec.type} index on ${rec.table}(${rec.columns.join(',')})`,
         severity: rec.reason.includes('missing') || rec.reason.includes('sequential')
           ? 'high'
@@ -89,7 +85,7 @@ export async function explainSQLService(
         sql: originalSql,
         sanitizedSql: sanitized.sanitized,
         dialect,
-        explanation: explanation as unknown,
+        explanation: explanation as any,
         confidence: explanation.confidence,
       },
     });

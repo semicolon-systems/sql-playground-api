@@ -34,11 +34,11 @@ export const logger = pino({
 export const httpLogger = pinoHttp({
   logger,
   autoLogging: {
-    ignore: (req) => {
+    ignore: (req: any) => {
       // Skip logging health checks
       return req.url?.includes('/health');
     },
-  },
+  } as any,
 });
 
 /**

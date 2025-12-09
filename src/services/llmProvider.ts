@@ -95,20 +95,23 @@ export class OpenAIProvider implements LLMProvider {
 
     logger.debug({ sql: request.sql }, 'Calling OpenAI');
 
-    const message = await client.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
+    const message = await client.chat.completions.create({
+      model: 'gpt-4-turbo',
       max_tokens: 2048,
-      system: SYSTEM_PROMPT,
       messages: [
+        {
+          role: 'system',
+          content: SYSTEM_PROMPT,
+        },
         {
           role: 'user',
           content,
         },
       ],
-    });
+    } as any);
 
     const responseText =
-      message.content[0].type === 'text' ? message.content[0].text : '';
+      message.choices[0]?.message?.content || '';
 
     try {
       const result = JSON.parse(responseText) as ExplanationResult;

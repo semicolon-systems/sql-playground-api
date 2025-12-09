@@ -100,6 +100,20 @@ export async function releaseStampedeLock(key: string): Promise<void> {
 }
 
 /**
+ * Record cache hit (for metrics)
+ */
+export function recordCacheHit(): void {
+  // TODO: integrate with prom-client metrics
+}
+
+/**
+ * Record cache miss (for metrics)
+ */
+export function recordCacheMiss(): void {
+  // TODO: integrate with prom-client metrics
+}
+
+/**
  * Check rate limit (simple token bucket per user/day)
  */
 export async function checkRateLimit(

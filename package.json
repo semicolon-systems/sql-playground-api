@@ -22,7 +22,13 @@
     "db:generate": "prisma generate",
     "db:studio": "prisma studio"
   },
-  "keywords": ["sql", "database", "api", "llm", "fastify"],
+  "keywords": [
+    "sql",
+    "database",
+    "api",
+    "llm",
+    "fastify"
+  ],
   "author": "SQL Playground Contributors",
   "repository": {
     "type": "git",
@@ -40,10 +46,12 @@
     "pino-http": "^8.6.1",
     "prom-client": "^15.0.0",
     "redis": "^4.6.13",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
     "@vitest/coverage-v8": "^1.0.0",
