@@ -1,9 +1,5 @@
-/**
- * Prisma schema for SQL Playground API
- * Defines data models for explanations, users, and LLM requests
- */
-
-// This file will be used by Prisma CLI
+// Prisma schema for SQL Playground API
+// Defines data models for explanations, users, and LLM requests
 // Run: npx prisma migrate dev to create migrations
 
 generator client {
@@ -15,9 +11,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/**
- * User account (optional, for auth and rate limiting)
- */
+// User account (optional, for auth and rate limiting)
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -33,10 +27,8 @@ model User {
   @@map("users")
 }
 
-/**
- * Cached explanation results
- * Keyed by query fingerprint for deduplication
- */
+// Cached explanation results
+// Keyed by query fingerprint for deduplication
 model ExplanationCache {
   id            String   @id @default(cuid())
   userId        String?
@@ -60,10 +52,8 @@ model ExplanationCache {
   @@index([expiresAt])
 }
 
-/**
- * LLM API request/response log
- * For auditing and rate limiting
- */
+// LLM API request/response log
+// For auditing and rate limiting
 model LLMRequest {
   id               String   @id @default(cuid())
   userId           String?
@@ -89,9 +79,7 @@ model LLMRequest {
   @@index([createdAt])
 }
 
-/**
- * Query statistics for analytics
- */
+// Query statistics for analytics
 model QueryStats {
   id                String   @id @default(cuid())
   queryHash         String   @unique
