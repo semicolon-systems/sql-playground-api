@@ -1,0 +1,107 @@
+/**
+ * Prisma schema for SQL Playground API
+ * Defines data models for explanations, users, and LLM requests
+ */
+
+// This file will be used by Prisma CLI
+// Run: npx prisma migrate dev to create migrations
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * User account (optional, for auth and rate limiting)
+ */
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  apiKey    String   @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  explanations ExplanationCache[]
+  llmRequests  LLMRequest[]
+
+  @@map("users")
+}
+
+/**
+ * Cached explanation results
+ * Keyed by query fingerprint for deduplication
+ */
+model ExplanationCache {
+  id            String   @id @default(cuid())
+  userId        String?
+  queryHash     String   @unique
+  queryPattern  String
+  sql           String   @db.Text
+  sanitizedSql  String?  @db.Text
+  dialect       String
+  explanation   Json // ExplanationResult stored as JSON
+  confidence    String   // "low" | "medium" | "high"
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime @default(dbgenerated("CURRENT_TIMESTAMP + interval '7 days'"))
+  ttl           Int      @default(604800) // 7 days in seconds
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("explanation_cache")
+  @@index([queryHash])
+  @@index([createdAt])
+  @@index([expiresAt])
+}
+
+/**
+ * LLM API request/response log
+ * For auditing and rate limiting
+ */
+model LLMRequest {
+  id               String   @id @default(cuid())
+  userId           String?
+  sql              String   @db.Text
+  prompt           String   @db.Text
+  provider         String   // "openai", "stub", etc.
+  model            String   // "gpt-4", "claude-3.5-sonnet", etc.
+  inputTokens      Int
+  outputTokens     Int
+  totalTokens      Int
+  status           String   // "success" | "error"
+  errorMessage     String?
+  latencyMs        Int
+  createdAt        DateTime @default(now())
+  costUsd          Float?
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("llm_requests")
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+/**
+ * Query statistics for analytics
+ */
+model QueryStats {
+  id                String   @id @default(cuid())
+  queryHash         String   @unique
+  totalRequests     Int      @default(0)
+  averageLatencyMs  Float    @default(0)
+  cacheHitRate      Float    @default(0)
+  topDiagnostics    Json // Array of common optimizations
+  lastRequestAt     DateTime @updatedAt
+  createdAt         DateTime @default(now())
+
+  @@map("query_stats")
+  @@index([lastRequestAt])
+}
