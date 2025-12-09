@@ -8,7 +8,7 @@ import { ExplainRequestSchema } from '../types.js';
 import { createLogger } from '../lib/logger.js';
 import { cacheGet, cacheSet } from '../lib/cache.js';
 import { recordRequestMetrics, recordCacheHit, recordCacheMiss } from '../lib/metrics.js';
-import { fingerprint, sanitizeSQL } from '@sql-playground/engine';
+import { fingerprint, sanitizeSQL } from '@gabrudj/sql-engine';
 import { explainSQLService } from '../services/engineService.js';
 
 const logger = createLogger({ module: 'explain_route' });

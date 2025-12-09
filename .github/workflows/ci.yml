@@ -37,31 +37,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Checkout engine package
-        uses: actions/checkout@v4
-        with:
-          repository: semicolon-systems/sql-playground-engine
-          path: engine
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      
-      - name: Build and link engine
-        run: |
-          cd engine
-          npm ci
-          npm run build
-          npm link
-          cd ..
 
       - name: Install dependencies
-        run: |
-          npm link @sql-playground/engine
-          npm ci
+        run: npm ci
 
       - name: Setup database
         env:

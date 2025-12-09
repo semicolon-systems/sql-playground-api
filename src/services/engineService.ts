@@ -11,8 +11,8 @@ import {
   parsePostgresExplainText,
   parseMysqlExplainJson,
   parseSqliteExplainQueryPlan,
-} from '@sql-playground/engine';
-import type { ExplanationResult, ExplainNode } from '@sql-playground/engine';
+} from '@gabrudj/sql-engine';
+import type { ExplanationResult, ExplainNode } from '@gabrudj/sql-engine';
 import { createLogger } from '../lib/logger.js';
 import { prisma } from '../lib/db.js';
 import { createLLMProvider } from './llmProvider.js';

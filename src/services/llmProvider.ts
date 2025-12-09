@@ -4,7 +4,7 @@
  */
 
 import { createLogger } from '../lib/logger.js';
-import type { ExplanationResult } from '@sql-playground/engine';
+import type { ExplanationResult } from '@gabrudj/sql-engine';
 
 const logger = createLogger({ module: 'llm' });
 
