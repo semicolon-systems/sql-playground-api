@@ -1,0 +1,43 @@
+{
+  "name": "sql-playground-api",
+  "description": "SQL Playground API - Fastify REST backend with Supabase & Upstash",
+  "builder": "nixpacks",
+  "envs": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "default": "production"
+    },
+    "DATABASE_URL": {
+      "description": "Supabase PostgreSQL connection string (postgresql://...)",
+      "required": true
+    },
+    "REDIS_URL": {
+      "description": "Upstash Redis connection string (redis://...)",
+      "required": false
+    },
+    "JWT_SECRET": {
+      "description": "JWT secret key for token signing (min 32 characters)",
+      "required": true
+    },
+    "LLM_PROVIDER": {
+      "description": "LLM provider: 'stub', 'openai', or 'anthropic'",
+      "default": "stub"
+    },
+    "OPENAI_API_KEY": {
+      "description": "OpenAI API key (only if using LLM_PROVIDER=openai)",
+      "required": false
+    },
+    "CORS_ORIGIN": {
+      "description": "Comma-separated list of allowed CORS origins",
+      "default": "https://sql-playground.pages.dev"
+    },
+    "PORT": {
+      "description": "API port",
+      "default": "3000"
+    },
+    "LOG_LEVEL": {
+      "description": "Log level: error, warn, info, debug",
+      "default": "info"
+    }
+  }
+}

@@ -18,8 +18,17 @@ client.on('error', (err) => logger.error({ err }, 'Redis error'));
  */
 export async function initCache(): Promise<void> {
   if (!client.isOpen) {
-    await client.connect();
-    logger.info('Redis connected');
+    const isUpstash = process.env.REDIS_URL?.includes('upstash.io');
+    const provider = isUpstash ? 'Upstash' : 'Local/Custom Redis';
+
+    logger.info(`Attempting ${provider} Redis connection...`);
+    try {
+      await client.connect();
+      logger.info({ provider }, 'Redis connected successfully');
+    } catch (error) {
+      logger.warn({ error }, `${provider} connection failed, cache disabled`);
+      // Don't throw - allow app to work without cache
+    }
   }
 }
 

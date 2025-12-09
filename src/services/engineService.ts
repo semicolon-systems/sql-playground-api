@@ -63,15 +63,18 @@ export async function explainSQLService(
     const heuristics = analyzeExplainPlan(parsedPlan);
     // Merge heuristics into explanation optimizations
     explanation.optimizations.push(
-      ...heuristics.recommendations.map((rec: any) => ({
-        title: `Add ${rec.type} index on ${rec.table}(${rec.columns.join(',')})`,
-        severity: rec.reason.includes('missing') || rec.reason.includes('sequential')
+      ...heuristics.recommendations.map((rec: any) => {
+        const severity = rec.reason.includes('missing') || rec.reason.includes('sequential')
           ? 'high'
-          : 'medium',
-        reason: rec.reason,
-        change: `CREATE INDEX idx_${rec.table}_${rec.columns[0]} ON ${rec.table}(${rec.columns.join(',')})`,
-        estimatedImpact: '2-10x faster queries',
-      }))
+          : 'medium';
+        return {
+          title: `Add ${rec.type} index on ${rec.table}(${rec.columns.join(',')})`,
+          severity: severity as 'low' | 'medium' | 'high',
+          reason: rec.reason,
+          change: `CREATE INDEX idx_${rec.table}_${rec.columns[0]} ON ${rec.table}(${rec.columns.join(',')})`,
+          estimatedImpact: '2-10x faster queries',
+        };
+      })
     );
   }
 

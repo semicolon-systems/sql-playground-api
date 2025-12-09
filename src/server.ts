@@ -20,7 +20,7 @@ const serverLogger = createLogger({ module: 'server' });
  */
 export async function createApp() {
   const app = Fastify({
-    logger: httpLogger,
+    logger: httpLogger as any,
     requestIdLogLabel: 'req_id',
     disableRequestLogging: false,
     requestTimeout: 30000,

@@ -6,8 +6,8 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { ExplainRequestSchema } from '../types.js';
 import { createLogger } from '../lib/logger.js';
-import { cacheGet, cacheSet, recordCacheHit, recordCacheMiss } from '../lib/cache.js';
-import { recordRequestMetrics } from '../lib/metrics.js';
+import { cacheGet, cacheSet } from '../lib/cache.js';
+import { recordRequestMetrics, recordCacheHit, recordCacheMiss } from '../lib/metrics.js';
 import { fingerprint, sanitizeSQL } from '@sql-playground/engine';
 import { explainSQLService } from '../services/engineService.js';
 
